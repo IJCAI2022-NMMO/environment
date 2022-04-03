@@ -1,7 +1,7 @@
 from .version import __version__
 
 import os
-motd = '''      ___           ___           ___           ___
+motd = r'''      ___           ___           ___           ___
      /__/\         /__/\         /__/\         /  /\      Version {:<8}
      \  \:\       |  |::\       |  |::\       /  /::\ 
       \  \:\      |  |:|:\      |  |:|:\     /  /:/\:\    An open source
@@ -13,7 +13,7 @@ motd = '''      ___           ___           ___           ___
     \  \:\        \  \:\        \  \:\        \  \::/     maintained at MIT in
      \__\/         \__\/         \__\/         \__\/      Phillip Isola's lab '''.format(__version__)
 
-from . import scripting
+from . import scripting, emulation
 from .lib import material
 try:
     from .lib.rating import OpenSkillRating
@@ -25,11 +25,11 @@ from .io.stimulus import Serialized
 from .io.action import Action
 from .core import config, agent
 from .core.agent import Agent
-from .core.env import Env
+from .core.env import Env, Replay
 from .systems.achievement import Task
 from .core.terrain import MapGenerator, Terrain
 
-__all__ = ['Env', 'config', 'scripting', 'agent', 'Agent', 'MapGenerator', 'Terrain',
+__all__ = ['Env', 'config', 'scripting', 'emulation', 'agent', 'Agent', 'MapGenerator', 'Terrain',
         'Serialized', 'action', 'Action', 'scripting', 'material',
-        'Task', 'Overlay', 'OverlayRegistry']
+        'Task', 'Overlay', 'OverlayRegistry', 'Replay']
 

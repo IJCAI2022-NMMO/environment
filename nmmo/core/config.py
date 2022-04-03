@@ -105,8 +105,25 @@ class Config(Template):
    RENDER                 = False
    '''Flag used by render mode'''
 
+   SAVE_REPLAY            = False
+   '''Flag used to save replays'''
+
    def game_system_enabled(self, name) -> bool:
       return hasattr(self, name)
+
+
+   ############################################################################
+   ### Emulation Parameters
+ 
+   EMULATE_FLAT_OBS       = False
+   '''Emulate a flat observation space'''
+
+   EMULATE_FLAT_ATN       = False
+   '''Emulate a flat action space'''
+
+   EMULATE_CONST_NENT     = False
+   '''Emulate a constant number of agents'''
+
 
    ############################################################################
    ### Population Parameters                                                   
@@ -151,6 +168,7 @@ class Config(Template):
       '''Size of the square tile crop visible to an agent'''
       return 2*self.NSTIM + 1
 
+
    ############################################################################
    ### Agent Parameters                                                   
    BASE_HEALTH                = 10
@@ -185,7 +203,7 @@ class Config(Template):
           r, c = c, r 
       return (r, c)
 
-   def SPAWN_CONCURRENT(self):
+   def SPAWN_CONCURRENT(self, shuffle=True):
       left   = self.TERRAIN_BORDER
       right  = self.TERRAIN_CENTER + self.TERRAIN_BORDER
       rrange = np.arange(left+2, right, 4).tolist()
@@ -202,12 +220,18 @@ class Config(Template):
       s4     = list(zip(highs, rrange))
 
       ret = s1 + s2 + s3 + s4
+      if shuffle:
+        assert not len(ret) % self.NPOP
+        ret = np.array_split(ret, self.NPOP)
+        np.random.shuffle(ret)
+        ret = np.concatenate(ret, axis=0).tolist()
       n = int(self.NENT * len(self.AGENTS))
       return ret[:n]
-
+    
    @property
    def SPAWN(self):
       return self.SPAWN_CONTINUOUS
+
 
    ############################################################################
    ### Terrain Generation Parameters
